@@ -68,13 +68,13 @@ class WeatherInfoBody extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Text(
-            'Updated at: ${parseDate(weatherModel.date).hour}:${parseDate(weatherModel.date).minute}  ',
+            'Updated at: ${weatherModel.date.hour}:${weatherModel.date.minute}  ',
             style: TextStyle(fontSize: 24, color: Colors.grey[900]),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
-            'Date: ${parseDate(weatherModel.date).day}/${parseDate(weatherModel.date).month}/${parseDate(weatherModel.date).year}  ',
+            'Date: ${weatherModel.date.day}/${weatherModel.date.month}/${weatherModel.date.year}  ',
             style: TextStyle(fontSize: 24, color: Colors.grey[900]),
             textAlign: TextAlign.center,
           ),
@@ -82,8 +82,4 @@ class WeatherInfoBody extends StatelessWidget {
       ),
     );
   }
-}
-
-DateTime parseDate(String dateString) {
-  return DateTime.parse(dateString);
 }
