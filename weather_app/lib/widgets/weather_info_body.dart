@@ -25,7 +25,7 @@ class WeatherInfoBody extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Text(
-            weatherModel.date,
+            'Updated at: ${parseDate(weatherModel.date).hour}:${parseDate(weatherModel.date).minute}  ',
             style: TextStyle(fontSize: 24, color: Colors.grey[900]),
             textAlign: TextAlign.center,
           ),
@@ -33,17 +33,24 @@ class WeatherInfoBody extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Image.network(weatherModel.image!, width: 100, height: 100),
-              Image.asset('assets/images/clear.png', width: 100, height: 100),
-              Text(weatherModel.temp, style: TextStyle(fontSize: 48)),
+              Image.network(
+                'https:${weatherModel.image}',
+                width: 100,
+                height: 100,
+              ),
+              // Image.asset('assets/images/clear.png', width: 100, height: 100),
+              Text(
+                weatherModel.temp.round().toString(),
+                style: TextStyle(fontSize: 48),
+              ),
               Column(
                 children: [
                   Text(
-                    'maxTemp: ${weatherModel.maxTemp}',
+                    'MaxTemp: ${weatherModel.maxTemp.round()}',
                     style: TextStyle(fontSize: 16, color: Colors.grey[900]),
                   ),
                   Text(
-                    'minTemp: ${weatherModel.minTemp}',
+                    'MinTemp: ${weatherModel.minTemp.round()}',
                     style: TextStyle(fontSize: 16, color: Colors.grey[900]),
                   ),
                 ],
@@ -60,4 +67,8 @@ class WeatherInfoBody extends StatelessWidget {
       ),
     );
   }
+}
+
+DateTime parseDate(String dateString) {
+  return DateTime.parse(dateString);
 }
