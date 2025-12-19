@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/models/weather_model.dart';
 
 class WeatherInfoBody extends StatelessWidget {
-  const WeatherInfoBody({super.key});
-
+  const WeatherInfoBody({super.key, required this.weatherModel});
+  final WeatherModel weatherModel;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,39 +20,40 @@ class WeatherInfoBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Alexandria',
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            weatherModel.cityName,
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           Text(
-            'updated at 23:46',
+            weatherModel.date,
             style: TextStyle(fontSize: 24, color: Colors.grey[900]),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset('assets/images/cloudy.png', width: 100, height: 100),
-              SizedBox(width: 16),
-              Text('30°C', style: TextStyle(fontSize: 48)),
+              // Image.network(weatherModel.image!, width: 100, height: 100),
+              Image.asset('assets/images/clear.png', width: 100, height: 100),
+              Text(weatherModel.temp, style: TextStyle(fontSize: 48)),
               Column(
                 children: [
                   Text(
-                    'maxtemp: 32°C',
+                    'maxTemp: ${weatherModel.maxTemp}',
                     style: TextStyle(fontSize: 16, color: Colors.grey[900]),
                   ),
                   Text(
-                    'mintemp: 28°C',
+                    'minTemp: ${weatherModel.minTemp}',
                     style: TextStyle(fontSize: 16, color: Colors.grey[900]),
                   ),
                 ],
               ),
+              const SizedBox(width: 8),
             ],
           ),
           Text(
-            'Ligh Rain',
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            weatherModel.weatherStatus,
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ],
