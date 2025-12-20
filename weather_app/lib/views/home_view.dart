@@ -19,20 +19,20 @@ class HomeView extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const SearchView()),
               );
             },
-            icon: const Icon(Icons.search, color: Colors.white),
+            icon: const Icon(Icons.search),
           ),
         ],
 
-        title: const Text('Home View', style: TextStyle(color: Colors.white)),
+        title: const Text('Home View'),
       ),
       body: BlocBuilder<GetWeatherCubit, WeatherState>(
         builder: (context, state) {
           if (state is WeatherInitialState) {
-            return NoWeatherBody();
+            return const NoWeatherBody();
           } else if (state is WeatherLoadedState) {
             return WeatherInfoBody(weatherModel: state.weatherModel);
           } else {
-            return Text('Opps There was an error');
+            return const Text('Opps There was an error');
           }
         },
       ),

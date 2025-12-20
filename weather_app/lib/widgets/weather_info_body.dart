@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/theme/theme_color.dart';
 
 class WeatherInfoBody extends StatelessWidget {
   const WeatherInfoBody({super.key, required this.weatherModel});
@@ -14,7 +15,10 @@ class WeatherInfoBody extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue[500]!, Colors.blue[100]!],
+          colors: [
+            getWeatherMaterialColor(weatherModel.weatherStatus),
+            getWeatherMaterialColor(weatherModel.weatherStatus).shade50,
+          ],
         ),
       ),
       child: Column(
