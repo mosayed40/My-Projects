@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:chat_app/pages/register_page.dart';
+import 'package:chat_app/constants/colors.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +14,12 @@ class LoginPage extends StatelessWidget {
     final passwordController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Color(0xff2b475e),
+      backgroundColor: AppColor.kPrimaryColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
-            const Spacer(flex: 3),
+            const SizedBox(height: 100),
             Image.asset('assets/images/scholar.png', height: 100, width: 100),
             const Text(
               'Scholar Chat',
@@ -30,16 +29,15 @@ class LoginPage extends StatelessWidget {
                 color: Colors.white,
                 fontFamily: 'pacifico',
               ),
+              textAlign: TextAlign.center,
             ),
-            const Spacer(flex: 2),
-            Container(
-              padding: const EdgeInsets.only(bottom: 10),
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
+            const SizedBox(height: 100),
+            const Text(
+              'Login',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+              textAlign: TextAlign.start,
             ),
+            const SizedBox(height: 10),
             CustomTextField(
               hintText: 'Enter your email...',
               labelText: 'Email',
@@ -62,17 +60,14 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 15),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterPage()),
-                );
+                Navigator.pushNamed(context, 'registerPage');
               },
               child: const Text(
-                'Don\'t have an account? Register page',
+                'Don\'t have an account? Register',
                 style: TextStyle(color: Colors.white, fontSize: 16),
+                textAlign: TextAlign.center,
               ),
             ),
-            const Spacer(flex: 4),
           ],
         ),
       ),
