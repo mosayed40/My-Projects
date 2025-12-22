@@ -21,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> formState = GlobalKey();
 
   bool isLoading = false;
+  bool _obscureText = true;
 
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
@@ -30,6 +31,12 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   @override
@@ -44,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return ModalProgressHUD(
       inAsyncCall: isLoading,
       child: Scaffold(
-        backgroundColor: AppColor.kPrimaryColor,
+        backgroundColor: kPrimaryColor,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -62,6 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 20),
                 CustomTextFormField(
                   controller: emailController,
+                  suffixIcon: Icon(Icons.email_outlined, color: Colors.white),
                   validator: (data) {
                     if (data!.isEmpty) {
                       return 'It cannot be empty.';
@@ -74,7 +82,15 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 15),
                 CustomTextFormField(
+                  obscureText: _obscureText,
                   controller: passwordController,
+                  suffixIcon: IconButton(
+                    onPressed: _togglePasswordVisibility,
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.white,
+                    ),
+                  ),
                   validator: (data) {
                     if (data!.isEmpty) {
                       return 'It cannot be empty.';
@@ -97,9 +113,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           password: passwordController.text,
                         );
                         if (!mounted) return;
+                        Navigator.pushNamed(
+                          context,
+                          ChatPage.id,
+                          arguments: emailController.text,
+                        );
                         emailController.clear();
                         passwordController.clear();
-                        Navigator.pushNamed(context, ChatPage.id);
                         return;
                       } on FirebaseAuthException catch (e) {
                         if (!mounted) return;

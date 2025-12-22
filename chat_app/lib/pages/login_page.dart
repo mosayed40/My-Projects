@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:chat_app/constants/constant.dart';
 import 'package:chat_app/pages/chat_page.dart';
+import 'package:chat_app/pages/register_page.dart';
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_logo.dart';
 import 'package:chat_app/widgets/custom_text_form_field.dart';
@@ -19,6 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
+  bool _obscureText = true;
 
   GlobalKey<FormState> formState = GlobalKey();
 
@@ -30,6 +32,12 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   @override
@@ -44,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
     return ModalProgressHUD(
       inAsyncCall: isLoading,
       child: Scaffold(
-        backgroundColor: AppColor.kPrimaryColor,
+        backgroundColor: kPrimaryColor,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -62,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 CustomTextFormField(
                   controller: emailController,
+                  suffixIcon: Icon(Icons.email_outlined, color: Colors.white),
                   validator: (data) {
                     if (data!.isEmpty) {
                       return 'It cannot be empty.';
@@ -74,7 +83,15 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 15),
                 CustomTextFormField(
+                  obscureText: _obscureText,
                   controller: passwordController,
+                  suffixIcon: IconButton(
+                    onPressed: _togglePasswordVisibility,
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.white,
+                    ),
+                  ),
                   validator: (data) {
                     if (data!.isEmpty) {
                       return 'It cannot be empty.';
@@ -97,9 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                           password: passwordController.text,
                         );
                         if (!mounted) return;
+                        Navigator.pushNamed(
+                          context,
+                          ChatPage.id,
+                          arguments: emailController.text,
+                        );
                         emailController.clear();
                         passwordController.clear();
-                        Navigator.pushNamed(context, ChatPage.id);
                         return;
                       } on FirebaseAuthException catch (e) {
                         if (!mounted) return;
@@ -136,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 15),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, 'registerPage');
+                    Navigator.pushNamed(context, RegisterPage.id);
                   },
                   child: const Text(
                     'Don\'t have an account? Register',

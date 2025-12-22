@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+const kPrimaryColor = Color(0xff2b475e);
 const kLogo = 'assets/images/scholar.png';
-
-class AppColor {
-  static const kPrimaryColor = Color(0xff2b475e);
-}
+const kMessagesCollections = 'messages';
+const kMessage = 'message';
+const kCreateAt = 'createAt';
