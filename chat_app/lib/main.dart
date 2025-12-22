@@ -1,4 +1,5 @@
 import 'package:chat_app/firebase_options.dart';
+import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/login_page.dart';
 import 'package:chat_app/pages/register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,13 +20,14 @@ class ScholarChat extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Chat App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      initialRoute: 'loginPage',
+      initialRoute: LoginPage.id,
 
       routes: {
-        'loginPage': (context) => LoginPage(),
-        'registerPage': (context) => RegisterPage(),
+        LoginPage.id: (context) => LoginPage(),
+        RegisterPage.id: (context) => RegisterPage(),
+        ChatPage.id: (context) => ChatPage(),
       },
     );
   }

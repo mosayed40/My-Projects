@@ -1,103 +1,164 @@
-import 'dart:developer';
-
-import 'package:chat_app/constants/colors.dart';
+// ignore_for_file: use_build_context_synchronously
+import 'package:chat_app/constants/constant.dart';
+import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/widgets/custom_button.dart';
-import 'package:chat_app/widgets/custom_text_field.dart';
+import 'package:chat_app/widgets/custom_logo.dart';
+import 'package:chat_app/widgets/custom_text_form_field.dart';
+import 'package:chat_app/helper/show_snac_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-  String? email;
-  String? password;
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+  static String id = 'loginPage';
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool isLoading = false;
 
   GlobalKey<FormState> formState = GlobalKey();
 
+  late final TextEditingController emailController;
+  late final TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.kPrimaryColor,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: formState,
-          child: ListView(
-            children: [
-              const SizedBox(height: 100),
-              Image.asset('assets/images/scholar.png', height: 100, width: 100),
-              const Text(
-                'Scholar Chat',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontFamily: 'pacifico',
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        backgroundColor: AppColor.kPrimaryColor,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: formState,
+            child: ListView(
+              children: [
+                const SizedBox(height: 100),
+                CustomLogo(),
+                const SizedBox(height: 100),
+                const Text(
+                  'Login',
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                  textAlign: TextAlign.start,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 100),
-              const Text(
-                'Login',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 10),
-              CustomTextField(
-                onChanged: (data) {
-                  email = data;
-                },
-                labelText: 'Email',
-                hintText: 'Enter your email...',
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                onChanged: (data) {
-                  password = data;
-                },
-                labelText: 'Password',
-                hintText: 'Enter your password...',
-              ),
-              const SizedBox(height: 30),
-              CustomButton(
-                textButton: 'Login',
-                onPressed: () async {
-                  try {
-                    final credential = await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                          email: email!,
-                          password: password!,
-                        );
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'user-not-found') {
-                      log('---No user found for that email.');
-                    } else if (e.code == 'wrong-password') {
-                      log('---Wrong password provided for that user.');
+                const SizedBox(height: 10),
+                CustomTextFormField(
+                  controller: emailController,
+                  validator: (data) {
+                    if (data!.isEmpty) {
+                      return 'It cannot be empty.';
+                    } else if (!data.contains('@') || !data.contains('.')) {
+                      return 'Enter a valid email';
                     }
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: const Color(0xFF47B24B),
-                        content: Text('Success Create Account'),
-                      ),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 15),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, 'registerPage');
-                },
-                child: const Text(
-                  'Don\'t have an account? Register',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                  textAlign: TextAlign.center,
+                  },
+                  labelText: 'Email',
+                  hintText: 'Enter your email...',
                 ),
-              ),
-            ],
+                const SizedBox(height: 15),
+                CustomTextFormField(
+                  controller: passwordController,
+                  validator: (data) {
+                    if (data!.isEmpty) {
+                      return 'It cannot be empty.';
+                    } else if (data.length < 6) {
+                      return 'The password is less than 6';
+                    }
+                  },
+                  labelText: 'Password',
+                  hintText: 'Enter your password...',
+                ),
+                const SizedBox(height: 30),
+                CustomButton(
+                  textButton: 'Login',
+                  onPressed: () async {
+                    if (formState.currentState!.validate()) {
+                      setState(() => isLoading = true);
+                      try {
+                        await loginUser(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
+                        if (!mounted) return;
+                        emailController.clear();
+                        passwordController.clear();
+                        Navigator.pushNamed(context, ChatPage.id);
+                        return;
+                      } on FirebaseAuthException catch (e) {
+                        if (!mounted) return;
+                        if (e.code == 'user-not-found') {
+                          showSnacBar(
+                            context,
+                            message: 'No user found for that email.',
+                          );
+                        } else if (e.code == 'wrong-password') {
+                          showSnacBar(
+                            context,
+                            message: 'Wrong password provided for that user.',
+                          );
+                        }
+                      } catch (e) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: const Color(0xFF8D0101),
+                            content: Text(
+                              'error: $e',
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      } finally {
+                        if (mounted) {
+                          setState(() => isLoading = false);
+                        }
+                      }
+                    }
+                  },
+                ),
+                const SizedBox(height: 15),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'registerPage');
+                  },
+                  child: const Text(
+                    'Don\'t have an account? Register',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+Future<void> loginUser({
+  required String email,
+  required String password,
+}) async {
+  await FirebaseAuth.instance.signInWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
 }
