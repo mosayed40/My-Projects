@@ -2,7 +2,7 @@ import 'package:store/helper/api.dart';
 import 'package:store/models/product_model.dart';
 
 class GetAllPeoductService {
-  Future<List<ProductModel>> getAllProductService() async {
+  Future<List<ProductModel>> getAllProduct() async {
     List<dynamic> response = await Api().get(url: 'products');
 
     List<ProductModel> productList = [];
