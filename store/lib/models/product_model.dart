@@ -1,7 +1,7 @@
 class ProductModel {
-  final int id;
+  final dynamic id;
   final String title;
-  final double price;
+  final dynamic price;
   final String description;
   final String category;
   final String image;
@@ -21,11 +21,13 @@ class ProductModel {
     return ProductModel(
       id: json['id'],
       title: json['title'],
-      price: (json['price'] as num).toDouble(),
+      price: json['price'],
       description: json['description'],
       category: json['category'],
       image: json['image'],
-      rating: Rating.fromJson(json['rating']),
+      rating: json['rating'] != null
+          ? Rating.fromJson(json['rating'])
+          : Rating(rate: 0.0, count: 0),
     );
   }
 
