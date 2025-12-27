@@ -12,6 +12,12 @@ class NotesView extends StatelessWidget {
         title: const Text('Notes', style: TextStyle(fontSize: 28)),
         actions: [CustomSearchIcon(icon: Icons.search, onPressed: () {})],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        shape: const CircleBorder(),
+        backgroundColor: Colors.blue.withValues(alpha: 1.0),
+        child: const Icon(Icons.add, color: Colors.black),
+      ),
       body: const NotesViewBody(),
     );
   }
