@@ -1,47 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SimpleBlocObserver implements BlocObserver {
+class SimpleBlocObserver extends BlocObserver {
   @override
-  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    debugPrint('chang = $change');
+  void onCreate(BlocBase bloc) {
+    super.onCreate(bloc);
+    debugPrint('🟢 Bloc Created → ${bloc.runtimeType}');
   }
 
   @override
-  void onClose(BlocBase<dynamic> bloc) {
-    // TODO: implement onClose
+  void onEvent(Bloc bloc, Object? event) {
+    super.onEvent(bloc, event);
+    debugPrint('📌 Bloc Event → ${bloc.runtimeType}, event = $event');
   }
 
   @override
-  void onCreate(BlocBase<dynamic> bloc) {
-    // TODO: implement onCreate
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    debugPrint('🔄 Bloc Change → ${bloc.runtimeType}, change = $change');
   }
 
   @override
-  void onDone(
-    Bloc<dynamic, dynamic> bloc,
-    Object? event, [
-    Object? error,
-    StackTrace? stackTrace,
-  ]) {
-    // TODO: implement onDone
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    debugPrint(
+      '🚀 Bloc Transition → ${bloc.runtimeType}\n'
+      'currentState = ${transition.currentState}\n'
+      'event = ${transition.event}\n'
+      'nextState = ${transition.nextState}',
+    );
   }
 
   @override
-  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    // TODO: implement onError
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    super.onError(bloc, error, stackTrace);
+    debugPrint('❌ Bloc Error → ${bloc.runtimeType}, error = $error');
+    debugPrint('$stackTrace');
   }
 
   @override
-  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
-    // TODO: implement onEvent
-  }
-
-  @override
-  void onTransition(
-    Bloc<dynamic, dynamic> bloc,
-    Transition<dynamic, dynamic> transition,
-  ) {
-    // TODO: implement onTransition
+  void onClose(BlocBase bloc) {
+    super.onClose(bloc);
+    debugPrint('🔴 Bloc Closed → ${bloc.runtimeType}');
   }
 }
