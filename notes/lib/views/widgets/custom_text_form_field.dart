@@ -6,16 +6,23 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     this.maxLines = 1,
-    required this.controller,
+    this.onSaved,
   });
   final String hintText;
   final int maxLines;
-  final TextEditingController controller;
+  final void Function(String?)? onSaved;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
+    return TextFormField(
+      validator: (val) {
+        if (val?.isEmpty ?? true) {
+          return 'Field is required';
+        } else {
+          return null;
+        }
+      },
+      onSaved: onSaved,
       maxLines: maxLines,
       cursorColor: kPrimaryColor,
       decoration: InputDecoration(
@@ -24,6 +31,7 @@ class CustomTextField extends StatelessWidget {
         border: buildBorder(),
         enabledBorder: buildBorder(),
         focusedBorder: buildBorder(kPrimaryColor),
+        errorBorder: buildBorder(Colors.red),
       ),
     );
   }
