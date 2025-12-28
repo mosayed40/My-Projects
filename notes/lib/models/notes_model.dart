@@ -1,7 +1,13 @@
 class NotesModel {
-  String title;
-  String desc;
-  String dateTime;
+  final String title;
+  final String subTitle;
+  final String date;
+  final int color;
 
-  NotesModel({required this.title, required this.desc, required this.dateTime});
+  const NotesModel({
+    required this.title,
+    required this.subTitle,
+    required this.date,
+    required this.color,
+  });
 }
