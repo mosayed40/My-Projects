@@ -7,7 +7,7 @@ class NotesViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 66, left: 16, right: 16),
+      padding: const EdgeInsets.all(16),
       child: ListView.builder(
         itemCount: 5,
         itemBuilder: (context, index) {
