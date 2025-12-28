@@ -7,8 +7,8 @@ class AddNoteBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleContriller = .new();
-    TextEditingController contentContriller = .new();
+    TextEditingController titleContriller = TextEditingController();
+    TextEditingController contentContriller = TextEditingController();
 
     return Padding(
       padding: const EdgeInsets.all(16.0),

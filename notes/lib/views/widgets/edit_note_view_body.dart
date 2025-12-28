@@ -6,8 +6,8 @@ class EditNoteViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController editTitleContriller = .new();
-    TextEditingController editContentContriller = .new();
+    TextEditingController editTitleContriller = TextEditingController();
+    TextEditingController editContentContriller = TextEditingController();
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
