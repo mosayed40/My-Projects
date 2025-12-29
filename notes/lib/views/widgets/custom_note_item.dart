@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
-import 'package:notes/constants.dart';
 import 'package:notes/models/note_model.dart';
 import 'package:notes/views/edit_note_view.dart';
 
 class CustomNoteItem extends StatelessWidget {
-  const CustomNoteItem({super.key, required this.note, required this.id});
+  const CustomNoteItem({super.key, required this.note});
   final NotesModel note;
-  final int id;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -48,8 +44,7 @@ class CustomNoteItem extends StatelessWidget {
               ),
               trailing: IconButton(
                 onPressed: () {
-                  // var box = Hive.box<NotesModel>(kNotesBox);
-                  // box.deleteAt(id);
+                  note.delete();
                 },
                 icon: const Icon(
                   FontAwesomeIcons.trash,

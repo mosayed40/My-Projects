@@ -19,7 +19,7 @@ class NotesViewBody extends StatelessWidget {
               child: ListView.builder(
                 itemCount: state.notes.length,
                 itemBuilder: (context, index) {
-                  return CustomNoteItem(id: index, note: state.notes[index]);
+                  return CustomNoteItem(note: state.notes[index]);
                 },
               ),
             );
