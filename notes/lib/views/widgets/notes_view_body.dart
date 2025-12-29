@@ -8,25 +8,26 @@ class NotesViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<NotesCubit>().fetchAllNotes();
+
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        context.read<NotesCubit>().fetchAllNotes();
-        final cubit = context.read<NotesCubit>();
-        final notes = cubit.notesData ?? [];
-
-        if (notes.isEmpty) {
-          return const Center(
-            child: Text('No notes available', style: TextStyle(fontSize: 18)),
-          );
+        if (state is NotesLoaded) {
+          if (state.notes.isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: ListView.builder(
+                itemCount: state.notes.length,
+                itemBuilder: (context, index) {
+                  return CustomNoteItem(id: index, note: state.notes[index]);
+                },
+              ),
+            );
+          }
         }
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: ListView.builder(
-            itemCount: notes.length,
-            itemBuilder: (context, index) {
-              return CustomNoteItem(note: notes[index]);
-            },
-          ),
+
+        return const Center(
+          child: Text('No notes available', style: TextStyle(fontSize: 18)),
         );
       },
     );
