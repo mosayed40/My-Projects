@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/cubits/notes_cubit/notes_cubit.dart';
@@ -12,10 +10,9 @@ class NotesViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NotesCubit, NotesState>(
       builder: (context, state) {
-        final cubit = context.read<NotesCubit>(); // استدعاء مرة واحدة
-        final notes = cubit.notes ?? [];
-
-        log('${notes.length}');
+        context.read<NotesCubit>().fetchAllNotes();
+        final cubit = context.read<NotesCubit>();
+        final notes = cubit.notesData ?? [];
 
         if (notes.isEmpty) {
           return const Center(
